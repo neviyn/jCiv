@@ -36,4 +36,20 @@ abstract class DisasterZone {
         }
         return found;
     }
+    
+    /**
+     * Check whether this zone contains a given mapNode
+     * @param nodeID the id of the mapnode to be checked
+     * @return true if the zone contains the node
+     */
+    public boolean containsNode(int nodeID)
+    {
+    	boolean found = false;
+    	for (MapNode n : zones) {
+    		if (n.nodeNum == nodeID) {
+    			found = true;
+    		}
+    	}
+    	return found;
+    }
 }
