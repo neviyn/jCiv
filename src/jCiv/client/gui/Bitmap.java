@@ -10,7 +10,7 @@ public class Bitmap {
 	public int height;
 
 	public int fontSize = 16;
-	public String chars = "ABCDEFGHIJKLMNOPQ";
+	public String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234.:";
 
 	public Bitmap(int width, int height) {
 		this.width = width;
@@ -44,6 +44,12 @@ public class Bitmap {
 		}
 	}
 
+	/**
+	 * Perform a block color fill on this bitmap.
+	 * 
+	 * @param color
+	 *            the color to fill the area with.
+	 */
 	public void fill(int color) {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
@@ -52,7 +58,20 @@ public class Bitmap {
 		}
 	}
 
+	/**
+	 * Draw a string to a specific location on the bitmap.
+	 * 
+	 * @param string
+	 *            The string to print
+	 * @param x
+	 *            The X location of where to print the string
+	 * @param y
+	 *            The Y location of where to print the string
+	 * @param color
+	 *            The color you want the string to appear.
+	 */
 	public void render(String string, int x, int y, int color) {
+		string = string.toUpperCase();
 		for (int c = 0; c < string.length(); c++) {
 			int index = chars.indexOf(string.charAt(c));
 			if (index != -1) {
@@ -60,15 +79,16 @@ public class Bitmap {
 					int ny = y + i;
 					if (ny < height) {
 						for (int j = 0; j < fontSize; j++) {
-							int nx = x + j + ((fontSize+2) * c);
+							int nx = x + j + ((fontSize + 2) * c);
 							if (nx < width) {
-								int srcX = ((index * fontSize) % Art.font.width) + j;
-								int srcY = (((index * fontSize) / Art.font.width)
-										* fontSize) + i;
-								
-								int srcPixel = Art.font.pixels[srcX + (srcY
-										* Art.font.width)];
-								if(srcPixel != Color.MAGENTA.getRGB()) {
+								int srcX = ((index * fontSize) % Art.font.width)
+										+ j;
+								int srcY = (((index * fontSize) / Art.font.width) * fontSize)
+										+ i;
+
+								int srcPixel = Art.font.pixels[srcX
+										+ (srcY * Art.font.width)];
+								if (srcPixel != Color.MAGENTA.getRGB()) {
 									pixels[nx + (ny * width)] = color;
 								}
 							}

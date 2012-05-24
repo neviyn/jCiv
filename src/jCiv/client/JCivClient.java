@@ -73,7 +73,7 @@ public class JCivClient extends Canvas implements Runnable {
 		}
 		
 		screen.render(game);
-		screen.render("GAME", 0, 0, Color.yellow.getRGB());	
+		screen.render("jciv Version: 0.0000001", 0, 0, Color.yellow.getRGB());	
 		
 		for (int i = 0; i < WIDTH * HEIGHT; i++) {
 			pixels[i] = screen.pixels[i];
