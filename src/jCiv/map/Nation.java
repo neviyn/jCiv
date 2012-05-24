@@ -1,6 +1,5 @@
 package jCiv.map;
 
-
 /**
  * The playable nations.
  * 
@@ -11,15 +10,13 @@ package jCiv.map;
  */
 public final class Nation {
 	private String name;
-	private MapNode[] startLocs;
+	private int id;
+	private int[] startLocs;
 	
-	public static final int SEVEN_PLAYER_GAME = 0; 
-	public static final int FIVE_PLAYER_GAME = 1;
-	public static final int THREE_PLAYER_GAME = 2;
-	
-	public Nation(String name, MapNode[] startLocs) 
+	public Nation(int id, String name, int[] startLocs) 
 	{
 		this.name = name;
+		this.id = id;
 		this.startLocs = startLocs;
 	}
 	
@@ -28,7 +25,17 @@ public final class Nation {
 		return name;
 	}
 	
-	public MapNode getStartLocation(int noPlayers)
+	public int getId()
+	{
+		return id;
+	}
+	
+	/**
+	 * Get the start location for the given number of players. 
+	 * @param noPlayers the number of players
+	 * @return the NodeNum for the start location
+	 */
+	public int getStartLocation(int noPlayers)
 	{
 		return startLocs[noPlayers];
 	}	
