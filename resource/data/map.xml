@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<mapNode id="1">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>4</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>2</link>
+				<link>9</link>
+				<link>10</link>
+				<link>11</link>
+				<link>13</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>10</link>
+				<link>13</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="2">
+		<ocean>false</ocean>
+		<coast>false</coast>
+		<popLimit>5</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>1</link>
+				<link>3</link>
+				<link>8</link>
+				<link>9</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="3">
+		<ocean>false</ocean>
+		<coast>false</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>2</link>
+				<link>4</link>
+				<link>8</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="4">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>3</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>3</link>
+				<link>8</link>
+				<link>6</link>
+				<link>5</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>6</link>
+				<link>5</link>
+				<link>58</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="5">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>4</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>4</link>
+				<link>6</link>
+				<link>58</link>
+				<link>127</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="6">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>5</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>8</link>
+				<link>4</link>
+				<link>7</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>6</link>
+				<link>5</link>
+				<link>127</link>
+				<link>7</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="7">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<citySite>Istrus</citySite>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>57</link>
+				<link>6</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>6</link>
+				<link>127</link>
+				<link>57</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="8">
+		<ocean>false</ocean>
+		<coast>false</coast>
+		<popLimit>3</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>9</link>
+				<link>2</link>
+				<link>3</link>
+				<link>4</link>
+				<link>6</link>
+				<link>57</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="9">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>23</link>
+				<link>24</link>
+				<link>57</link>
+				<link>8</link>
+				<link>2</link>
+				<link>1</link>
+				<link>10</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>23</link>
+				<link>123</link>
+				<link>10</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="10">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>1</link>
+				<link>9</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>9</link>
+				<link>1</link>
+				<link>123</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="11">
+		<ocean>false</ocean>
+		<coast>false</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>1</link>
+				<link>12</link>
+				<link>13</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="12">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>11</link>
+				<link>13</link>
+				<link>14</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>14</link>
+				<link>15</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="13">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>3</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>1</link>
+				<link>11</link>
+				<link>12</link>
+				<link>14</link>
+				<link>18</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>1</link>
+				<link>18</link>
+				<link>123</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="14">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<citySite>Tarquinii</citySite>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>12</link>
+				<link>13</link>
+				<link>18</link>
+				<link>19</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>12</link>
+				<link>15</link>
+				<link>19</link>
+				<link>122</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="15">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>12</link>
+				<link>13</link>
+				<link>18</link>
+				<link>19</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>12</link>
+				<link>15</link>
+				<link>19</link>
+				<link>122</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="16">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<citySite>Olbia</citySite>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>17</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>15</link>
+				<link>17</link>
+				<link>122</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="17">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>16</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>16</link>
+				<link>122</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="18">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>13</link>
+				<link>14</link>
+				<link>19</link>
+				<link>20</link>
+				<link>21</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>13</link>
+				<link>21</link>
+				<link>123</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="19">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<citySite>Cumae</citySite>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>14</link>
+				<link>18</link>
+				<link>20</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>14</link>
+				<link>20</link>
+				<link>122</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="20">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>19</link>
+				<link>18</link>
+				<link>21</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>19</link>
+				<link>21</link>
+				<link>120</link>
+				<link>121</link>
+				<link>122</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="21">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<citySite>Tarentum</citySite>
+		<popLimit>1</popLimit>
+		<neighbourList>
+			<nodeLinks type="land">
+				<link>18</link>
+				<link>20</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>18</link>
+				<link>20</link>
+				<link>22</link>
+				<link>23</link>
+				<link>122</link>
+				<link>123</link>
+				<link>124</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+</map>
