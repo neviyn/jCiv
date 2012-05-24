@@ -3,7 +3,12 @@ package jCiv.client;
 import jCiv.client.gui.Screen;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
@@ -25,6 +30,9 @@ public class JCivClient extends Canvas implements Runnable {
 	Screen screen;
 	InputHandler ih; 
 	
+	private BufferedImage img;
+	private int[] pixels;
+	
 	/**
 	 * 
 	 * The constructor that creates the game and sets the default
@@ -42,6 +50,12 @@ public class JCivClient extends Canvas implements Runnable {
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		
 		ih = new InputHandler();
+		
+		game = new Game();
+		screen = new Screen(WIDTH, HEIGHT);
+		
+		img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 	}
 	
 	public void run() {
@@ -52,7 +66,24 @@ public class JCivClient extends Canvas implements Runnable {
 	}
 	
 	private void render() {
-		screen.render(game);		
+		BufferStrategy bs = getBufferStrategy();
+		if (bs == null) {
+			createBufferStrategy(3);
+			return;
+		}
+		
+		screen.render(game);
+		screen.render("jciv Version: 0.0000001", 0, 0, Color.yellow.getRGB());	
+		
+		for (int i = 0; i < WIDTH * HEIGHT; i++) {
+			pixels[i] = screen.pixels[i];
+		}
+
+		Graphics g = bs.getDrawGraphics();
+		g.fillRect(0, 0, getWidth(), getHeight());
+		g.drawImage(img, 0, 0, WIDTH, HEIGHT, null);
+		g.dispose();
+		bs.show();		
 	}
 
 	private void tick() {

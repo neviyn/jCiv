@@ -1,5 +1,7 @@
 package jCiv.client.gui;
 
+import java.awt.Color;
+
 import jCiv.Civ;
 import jCiv.Progress;
 import jCiv.client.Game;
@@ -25,8 +27,10 @@ public class Screen extends Bitmap {
 		
 		renderMap(game.map);
 		renderCivs(game.civs);
+		
+		fill(Color.BLUE.getRGB());
 	}
-	
+		
 	public void renderMap(JCivMap map) {
 		
 	}
