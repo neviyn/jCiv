@@ -106,7 +106,7 @@ public class JCivClient extends Canvas implements Runnable {
 	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("JCiv Board Game Client");
-		JCivClient client = new JCivClient(800, 600);		
+		JCivClient client = new JCivClient(1024, 768);		
 		
 		frame.add(client);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
