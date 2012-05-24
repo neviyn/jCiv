@@ -1,0 +1,6 @@
+<nations>
+	<nation id="1">
+		<name>Africa</name>
+		<startingPositions>
+			<position noPlayers="5">42</position>
+			<position noPlayers="6">42</position></startingPositions></nation></nations>
