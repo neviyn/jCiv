@@ -1,6 +1,10 @@
 package jCiv.fileHandling;
 
 import org.w3c.dom.*;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,7 +17,6 @@ import jCiv.map.Nation;
  */
 public class NationLoader extends XMLLoader {
 
-	Document doc;
 	List<Nation> nations;
 	
 	/**
@@ -22,6 +25,7 @@ public class NationLoader extends XMLLoader {
 	 * @param filename the file name of the XML document to be loaded and parsed.
 	 */
 	public NationLoader(String filename) 
+		throws IOException, SAXException, ParserConfigurationException
 	{
 		nations = new ArrayList<Nation>();
 		doc = loadDocument(filename);

@@ -10,24 +10,26 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException; 
 
 public abstract class XMLLoader {
 
-	protected static Document loadDocument(String filename)
+	protected Document doc;
+	
+	protected Document loadDocument(String filename)
+		throws SAXException, IOException, ParserConfigurationException
 	{
-		Document doc = null;
+		doc = null;
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File(filename));
 		} catch (SAXException se) {
 			System.err.println("Failed to parse document: " + filename);
-			se.printStackTrace(System.err);
+			throw se;
 		} catch (IOException ie) {
 			System.err.println("Failed to load document: " + filename);
-			ie.printStackTrace(System.err);
+			throw ie;
 		} catch (ParserConfigurationException pe) {
-			System.err.println("The parser configuration has failed, while attempting to parse " + filename);
-			pe.printStackTrace(System.err);
+			System.err.println("The parser configuration has failed, while attempting to parse document:" + filename);
+			throw pe;
 		} 
 		doc.getDocumentElement().normalize();
 		return doc;
