@@ -39,4 +39,17 @@ public final class Nation {
 	{
 		return startLocs[noPlayers];
 	}	
+	
+	@Override
+	public String toString()
+	{
+		String result = "";
+		result += id;
+		result += ": " + name;
+		result += "\n";
+		for (int i=0; i<7; i++) {
+			result += i + ": " + startLocs[i];
+		}
+		return result;
+	}
 }

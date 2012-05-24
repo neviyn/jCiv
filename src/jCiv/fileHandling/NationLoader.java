@@ -47,14 +47,16 @@ public class NationLoader extends XMLLoader {
 		for (int i=0; i<nationsList.getLength(); i++) {
 			Element nationElem = (Element) nationsList.item(i);
 			int nationID = Integer.parseInt(nationElem.getAttribute("id"));
-			String nationName = nationElem.getElementsByTagName("name").item(0).getNodeValue();
+			String nationName = nationElem.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue();
 			
-			NodeList nationStartPositions = nationElem.getElementsByTagName("startingPositions").item(0).getChildNodes();
+			Element sp = (Element) nationElem.getElementsByTagName("startingPositions").item(0);
+			NodeList nationStartPositions = sp.getElementsByTagName("position");
 			int[] startingPositions = new int[7]; // TODO: change this to a better method of determining max players
 			for (int j=0; j<nationStartPositions.getLength(); j++) {
 				Element startPosElem = (Element) nationStartPositions.item(j);
 				int noPlayers = Integer.parseInt(startPosElem.getAttribute("noPlayers"));
-				startingPositions[noPlayers] = Integer.parseInt(startPosElem.getNodeValue());
+				String val = ((Node) startPosElem).getChildNodes().item(0).getNodeValue();
+				startingPositions[noPlayers] = Integer.parseInt(val);
 			}
 			nations.add(new Nation(nationID, nationName, startingPositions));
 		}
