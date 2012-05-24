@@ -339,8 +339,8 @@
 	<mapNode id="21">
 		<ocean>false</ocean>
 		<coast>true</coast>
-		<citySite>Tarentum</citySite>
 		<popLimit>1</popLimit>
+		<citySite>Tarentum</citySite>
 		<neighbourList>
 			<nodeLinks type="land">
 				<link>18</link>
@@ -354,6 +354,72 @@
 				<link>122</link>
 				<link>123</link>
 				<link>124</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="22">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<citySite>Corcya</citySite>
+		<neighbourList>
+			<nodeLinks type="sea">
+				<link>21</link>
+				<link>23</link>
+				<link>26</link>
+				<link>28</link>
+				<link>123</link>
+				<link>124</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="23">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<citySite>Apollonia</citySite>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>9</link>
+				<link>24</link>
+				<link>25</link>
+				<link>26</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>22</link>
+				<link>26</link>
+				<link>9</link>
+				<link>21</link>
+				<link>123</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="24">
+		<ocean>false</ocean>
+		<coast>false</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>9</link>
+				<link>23</link>
+				<link>25</link>
+				<link>56</link>
+				<link>57</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="25">
+		<ocean>false</ocean>
+		<coast>false</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>23</link>
+				<link>24</link>
+				<link>56</link>
+				<link>55</link>
+				<link>27</link>
+				<link>26</link>
 			</nodeLinks>
 		</neighbourList>
 	</mapNode>
