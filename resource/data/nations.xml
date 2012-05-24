@@ -3,4 +3,21 @@
 		<name>Africa</name>
 		<startingPositions>
 			<position noPlayers="5">42</position>
-			<position noPlayers="6">42</position></startingPositions></nation></nations>
+			<position noPlayers="6">42</position>
+		</startingPositions>
+	</nation>
+	<nation id="2">
+		<name>Italy</name>
+		<startingPositions>
+			<position noPlayers="3">5</position>
+			<position noPlayers="6">5</position>
+		</startingPositions>
+	</nation>
+	<nation id="3">
+		<name>Illyria</name>
+		<startingPositions>
+			<position noPlayers="3">14</position>
+			<position noPlayers="6">14</position>
+		</startingPositions>
+	</nation>
+</nations>
