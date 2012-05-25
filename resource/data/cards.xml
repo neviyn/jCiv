@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cards>
+    <civCard id="Spiritualism">
+        <colour>Blue:Green</colour>
+        <score>30</score>
+        <discount>5:20</discount>
+        <other />
+    </civCard>
+    <civCard id="Theatre">
+        <colour>Blue</colour>
+        <score>60</score>
+        <discount>5</discount>
+        <other>Counts 20 towards Education</other>
+    </civCard>
+    <civCard id="Music">
+        <colour>Blue</colour>
+        <score>60</score>
+        <discount>5</discount>
+        <other>Counts 30 towards Philosophy</other>
+    </civCard>
+    <civCard id="Planning">
+        <colour>Blue:Pink</colour>
+        <score>80</score>
+        <discount>5:0</discount>
+        <other>Counts 15 towards any Civic</other>
+    </civCard>
+    <civCard id="Farming">
+        <colour>Orange</colour>
+        <score>110</score>
+        <discount>10</discount>
+        <other>Permits an increase in population</other>
+    </civCard>
+    <civCard id="Weaving">
+        <colour>Orange</colour>
+        <score>45</score>
+        <discount>10</discount>
+        <other>Ships allowed an extra move</other>
+    </civCard>
+    <civCard id="Ceramics">
+        <colour>Orange</colour>
+        <score>45</score>
+        <discount>10</discount>
+        <other>With Grain, reduces the effects of Famine</other>
+    </civCard>
+    <civCard id="Metalworking">
+        <colour>Orange</colour>
+        <score>80</score>
+        <discount>10</discount>
+        <other>Gives an advantage in battle</other>
+    </civCard>
+    <civCard id="Construction">
+        <colour>Orange:Green</colour>
+        <score>140</score>
+        <discount>10:20</discount>
+        <other>Strengthens city defences and reduces the effects of Flood</other>
+    </civCard>
+    <civCard id="Minting">
+        <colour>Green</colour>
+        <score>110</score>
+        <discount>20</discount>
+        <other>Allows change in taxation</other>
+    </civCard>
+    <civCard id="Vaccination">
+        <colour>Green</colour>
+        <score>140</score>
+        <discount>20</discount>
+        <other>Reduces effects of Epidemic</other>
+    </civCard>
+    <civCard id="Stargazing">
+        <colour>Green</colour>
+        <score>80</score>
+        <discount>20</discount>
+        <other>Permits voyages across open seas</other>
+    </civCard>
+    <civCard id="Education">
+        <colour>Blue:Pink</colour>
+        <score>110</score>
+        <discount>5:0</discount>
+        <other>Counts 25 towards Law, Democracy and Philosophy</other>
+    </civCard>
+    <civCard id="Democracy">
+        <colour>Pink</colour>
+        <score>200</score>
+        <discount>Orange</discount>
+        <other>Reduces the effects of Civil War &amp; Civil Disorder</other>
+    </civCard>
+    <civCard id="Philosophy">
+        <colour>Pink</colour>
+        <score>240</score>
+        <discount>Green</discount>
+        <other>Reduces the effects of Iconoclasm &amp; Heresy and modifies Civil War</other>
+    </civCard>
+    <civCard id="Law">
+        <colour>Pink</colour>
+        <score>170</score>
+        <discount>Blue</discount>
+        <other>Required for Democracy and Philosophy. Reduces the effects off Civil Disorder, Iconoclasm &amp; Heresy</other>
+    </civCard>
+
+    <tradeCard>
+
+    </tradeCard>
+</cards>
