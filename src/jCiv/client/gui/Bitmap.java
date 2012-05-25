@@ -43,6 +43,34 @@ public class Bitmap {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * Draw another bitmap onto this bitmap with scale!
+	 * 
+	 * @param bitmap
+	 *            the image to draw onto this bitmap
+	 * @param x
+	 *            the x location of the image on this bitmap
+	 * @param y
+	 *            the y location of the image on this bitmap
+	 * @param scale 
+	 * 			  the scale relative to the original texture
+	 */
+	public void render(Bitmap bitmap, int x, int y, int scale) {
+		for (int i = 0; i < bitmap.height*scale; i++) {
+			int ny = y + i;
+			if (ny < height) {
+				for (int j = 0; j < bitmap.width*scale; j++) {
+					int nx = x + j;
+					if (nx < width) {
+						pixels[nx + (ny * width)] = bitmap.pixels[(j/scale)
+								+ ((i/scale) * bitmap.width)];
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Perform a block color fill on this bitmap.
@@ -85,6 +113,35 @@ public class Bitmap {
 										+ j;
 								int srcY = (((index * fontSize) / Art.font.width) * fontSize)
 										+ i;
+
+								int srcPixel = Art.font.pixels[srcX
+										+ (srcY * Art.font.width)];
+								if (srcPixel != Color.MAGENTA.getRGB()) {
+									pixels[nx + (ny * width)] = color;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void render(String string, int x, int y, int color, double scale) {
+		string = string.toUpperCase();
+		for (int c = 0; c < string.length(); c++) {
+			int index = chars.indexOf(string.charAt(c));
+			if (index != -1) {
+				for (int i = 0; i < fontSize*scale; i++) {
+					int ny = y + i;
+					if (ny < height) {
+						for (int j = 0; j < fontSize*scale; j++) {
+							int nx = (x + j + (((int)(fontSize*scale) + (int)(2*scale)) * c));
+							if (nx < width) {
+								int srcX = ((index * fontSize) % Art.font.width)
+										+ (int)(j / scale);
+								int srcY = (((index * fontSize) / Art.font.width) * fontSize)
+										+ (int)(i / scale);
 
 								int srcPixel = Art.font.pixels[srcX
 										+ (srcY * Art.font.width)];

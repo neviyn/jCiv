@@ -15,7 +15,7 @@ public class Game {
 	public int playerCiv;
 	
 	public Game() {
-		inMenu = true;
+		inMenu = false;
 		menu = new MainMenu();
 	}
 	
@@ -23,7 +23,7 @@ public class Game {
 		if(inMenu) {
 			menu.tick(ih, this);			
 		} else {
-			//Do game things :-P 
+			// DO Game like thingys 
 		}
 	}
 }

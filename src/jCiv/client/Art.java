@@ -10,8 +10,10 @@ import jCiv.client.gui.Bitmap;
 public class Art {
 	
 	public static final String fontLocation = "/art/font.png";
+	public static final String bottomBarLocation = "/art/bottomBar.png";
 	
 	public static final Bitmap font = loadArt(fontLocation);
+	public static final Bitmap bottomBar = loadArt(bottomBarLocation);
 	
 	public static Bitmap loadArt(String location) {
 		try {

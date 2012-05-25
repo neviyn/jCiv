@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import jCiv.Civ;
 import jCiv.Progress;
+import jCiv.client.Art;
 import jCiv.client.Game;
 import jCiv.map.JCivMap;
 
@@ -29,6 +30,11 @@ public class Screen extends Bitmap {
 		renderCivs(game.civs);
 		
 		fill(Color.BLUE.getRGB());
+		
+		render(Art.bottomBar, 0, height - 208, 2);
+		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 128, Color.GREEN.getRGB(), 2);
+		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 64, Color.GREEN.getRGB(), 1);
+		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 8, Color.GREEN.getRGB(), 0.5);
 	}
 		
 	public void renderMap(JCivMap map) {
