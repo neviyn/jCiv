@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * User: nathan
+ * User: Nathan Cannon
  * Date: 25/05/12
  * Time: 19:33
  */
@@ -79,6 +79,9 @@ public class StaxXMLLoader {
                             case "link":
                                 state = 6;
                                 break;
+                            case "citySite":
+                                state = 7;
+                                break;
                             case "mapNode":
                                 nodeNum = Integer.parseInt(read.getAttributeValue(0));
                                 break;
@@ -105,6 +108,9 @@ public class StaxXMLLoader {
                             case 6:
                                 neighbours.add(new Tuple(linkType, Integer.parseInt(read.getText())));
                                 break;
+                            case 7:
+                                cityPoint = !read.getText().equals("");
+                                break;
                             default:
                                 throw new IllegalStateException("Unknown state based on XML tag!");
                         }
@@ -116,6 +122,7 @@ public class StaxXMLLoader {
                             case "mapNode":
                                 MapNode in = new MapNode(nodeNum,ocean,coast,support,cityPoint);
                                 nodes.put(nodeNum, in);
+                                cityPoint = false;
                                 break;
                             case "neighbourList":
                                 nextTo.put(nodeNum, neighbours);
