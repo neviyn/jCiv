@@ -9,7 +9,6 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -18,15 +17,15 @@ import java.util.Map;
  * Time: 19:33
  */
 public class StaxXMLLoader {
-    public HashMap<Integer, MapNode> gameMap;
+    public final HashMap<Integer, MapNode> gameMap;
 
     public StaxXMLLoader(String mapLocation)
     {
         gameMap = loadMap(mapLocation);
     }
-    public HashMap<Integer, MapNode> loadMap(String input)
+    private HashMap<Integer, MapNode> loadMap(String input)
     {
-        HashMap<Integer, MapNode> nodes = new HashMap();
+        HashMap<Integer, MapNode> nodes = new HashMap<>();
         try
         {
             // Create connection to XML file
@@ -35,8 +34,8 @@ public class StaxXMLLoader {
             XMLInputFactory fact = XMLInputFactory.newFactory();
             XMLStreamReader read = fact.createXMLStreamReader(s);
             // Create variables to hold active data in.
-            HashMap<Integer, ArrayList<Tuple>> nextTo = new HashMap();
-            ArrayList<Tuple> neighbours = new ArrayList();
+            HashMap<Integer, ArrayList<Tuple>> nextTo = new HashMap<>();
+            ArrayList<Tuple> neighbours = new ArrayList<>();
             int state = 0;
             int nodeNum = -1;
             boolean ocean = false;
@@ -120,7 +119,7 @@ public class StaxXMLLoader {
                                 break;
                             case "neighbourList":
                                 nextTo.put(nodeNum, neighbours);
-                                neighbours = new ArrayList();
+                                neighbours = new ArrayList<>();
                                 break;
                             // XML file has ended.
                             case "map":
@@ -141,15 +140,13 @@ public class StaxXMLLoader {
                 }
             }
             // Transform neighbour data onto nodes.
-            Iterator it = nextTo.entrySet().iterator();
-            while(it.hasNext())
-            {
-                Map.Entry entry = (Map.Entry) it.next();
-                int key = (Integer)entry.getKey();
-                ArrayList<Tuple> value = (ArrayList<Tuple>)entry.getValue();
+            for (Map.Entry<Integer, ArrayList<Tuple>> integerArrayListEntry : nextTo.entrySet()) {
+                Map.Entry entry = (Map.Entry) integerArrayListEntry;
+                int key = (Integer) entry.getKey();
+                @SuppressWarnings("unchecked")
+                ArrayList<Tuple> value = (ArrayList<Tuple>) entry.getValue();
                 MapNode first = nodes.get(key);
-                for(Tuple t : value)
-                {
+                for (Tuple t : value) {
                     first.addNeighbour(t.linkT, nodes.get(t.target));
                 }
 
@@ -163,8 +160,8 @@ public class StaxXMLLoader {
     }
 
     private class Tuple {
-        public int linkT;
-        public int target;
+        public final int linkT;
+        public final int target;
 
         private Tuple(int linkT,int target)
         {
