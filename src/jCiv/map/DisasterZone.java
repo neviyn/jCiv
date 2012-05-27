@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Date: 24/05/12
  * Time: 13:42
  */
-abstract class DisasterZone {
+public abstract class DisasterZone {
     private ArrayList<MapNode> zones;
 
     public DisasterZone(ArrayList<MapNode> zones)
