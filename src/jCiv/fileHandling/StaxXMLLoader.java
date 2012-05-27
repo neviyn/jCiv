@@ -1,9 +1,6 @@
 package jCiv.fileHandling;
 
-import jCiv.map.Floodplain;
-import jCiv.map.MapNode;
-import jCiv.map.DisasterZone;
-import jCiv.map.Volcano;
+import jCiv.map.*;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -20,20 +17,22 @@ import java.util.Map;
  * Time: 19:33
  */
 public class StaxXMLLoader {
-    private final String gameMap;
-    private final String disasterZonesLocation;
+    private final String gameMapFile;
+    private final String disasterZonesLocationFile;
+    private final String nationsFile;
 
-    public StaxXMLLoader(String mapLocation, String disasterZonesLocation)
+    public StaxXMLLoader(String mapLocation, String disasterZonesLocation, String nationsFile)
     {
-        this.gameMap = mapLocation;
-        this.disasterZonesLocation = disasterZonesLocation;
+        this.gameMapFile = mapLocation;
+        this.disasterZonesLocationFile = disasterZonesLocation;
+        this.nationsFile = nationsFile;
     }
     private HashMap<Integer, MapNode> loadMap() throws XMLStreamException
     {
         HashMap<Integer, MapNode> nodes = new HashMap<>();
         // Create connection to XML file
-        System.out.println("Opening:" + gameMap);
-        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(gameMap).getPath());
+        System.out.println("Opening:" + gameMapFile);
+        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(gameMapFile).getPath());
         XMLInputFactory fact = XMLInputFactory.newFactory();
         XMLStreamReader read = fact.createXMLStreamReader(s);
         // Create variables to hold active data in.
@@ -168,8 +167,8 @@ public class StaxXMLLoader {
     {
         ArrayList<DisasterZone> zones = new ArrayList<>();
         // Create connection to XML file
-        System.out.println("Opening:" + disasterZonesLocation);
-        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(disasterZonesLocation).getPath());
+        System.out.println("Opening:" + disasterZonesLocationFile);
+        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(disasterZonesLocationFile).getPath());
         XMLInputFactory fact = XMLInputFactory.newFactory();
         XMLStreamReader read = fact.createXMLStreamReader(s);
         int state = 0;
@@ -252,6 +251,70 @@ public class StaxXMLLoader {
         return zones;
     }
 
+    public ArrayList<Nation> loadNations() throws XMLStreamException
+    {
+        ArrayList<Nation> nations = new ArrayList<>();
+        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(nationsFile).getPath());
+        XMLInputFactory fact = XMLInputFactory.newFactory();
+        XMLStreamReader read = fact.createXMLStreamReader(s);
+        int state = 0;
+        int nationID = 0;
+        int playerNumPos = 0;
+        String nationName = null;
+        ArrayList<Integer> startLocs = new ArrayList<>();
+        boolean running = true;
+        // Generate nodes and a list to generate neighbour data from.
+        while(running)
+        {
+            int eventCode = read.next();
+            switch(eventCode) {
+                // Starting XML element, set read state.
+                case XMLStreamConstants.START_ELEMENT:
+                    switch(read.getLocalName()){
+                        case "nation":
+                            nationID = Integer.parseInt(read.getAttributeValue(0));
+                            break;
+                        case "name":
+                            state = 1;
+                            break;
+                        case "position":
+                            state = 2;
+                            playerNumPos = Integer.parseInt(read.getAttributeValue(0));
+                            break;
+                    }
+                    break;
+                // Read data between XML tags based on state, state indicates the tag we are within.
+                case XMLStreamConstants.CHARACTERS:
+                    switch(state){
+                        case 1:
+                            nationName = read.getText();
+                            break;
+                        case 2:
+                            //TODO: review Nation.java for how starting locations are stored.
+                            break;
+
+                    }
+                    break;
+                // If we now have enough data to do something, do it.
+                case XMLStreamConstants.END_ELEMENT:
+                    switch (read.getLocalName()){
+                        case "nation":
+                            Nation temp = new Nation(nationID, nationName, toIntArray(startLocs));
+                            nations.add(temp);
+                    }
+                    break;
+                // XML file has ended (redundant).
+                case XMLStreamConstants.END_DOCUMENT:
+                    running = false;
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown XML event.");
+
+            }
+        }
+        return nations;
+    }
+
     private class Tuple {
         public final int linkT;
         public final int target;
@@ -261,6 +324,14 @@ public class StaxXMLLoader {
             this.linkT = linkT;
             this.target = target;
         }
+    }
+
+    int[] toIntArray(ArrayList<Integer> list)  {
+        int[] ret = new int[list.size()];
+        int i = 0;
+        for (Integer e : list)
+            ret[i++] = e;
+        return ret;
     }
 }
 
