@@ -27,6 +27,11 @@ public class StaxXMLLoader {
         this.disasterZonesLocationFile = disasterZonesLocation;
         this.nationsFile = nationsFile;
     }
+
+    private enum mapState
+    {
+        ZERO, OCEAN, COAST, POPLIMIT, NEIGHBOURLIST, NODELINKS, LINK, CITYSITE
+    }
     private HashMap<Integer, MapNode> loadMap() throws XMLStreamException
     {
         HashMap<Integer, MapNode> nodes = new HashMap<>();
@@ -38,7 +43,7 @@ public class StaxXMLLoader {
         // Create variables to hold active data in.
         HashMap<Integer, ArrayList<Tuple>> nextTo = new HashMap<>();
         ArrayList<Tuple> neighbours = new ArrayList<>();
-        int state = 0;
+        mapState state = mapState.ZERO;
         int nodeNum = -1;
         boolean ocean = false;
         boolean coast = false;
@@ -55,19 +60,19 @@ public class StaxXMLLoader {
                 case XMLStreamConstants.START_ELEMENT:
                     switch(read.getLocalName()){
                         case "ocean":
-                            state = 1;
+                            state = mapState.OCEAN;
                             break;
                         case "coast":
-                            state = 2;
+                            state = mapState.COAST;
                             break;
                         case "popLimit":
-                            state = 3;
+                            state = mapState.POPLIMIT;
                             break;
                         case "neighbourList":
-                            state = 4;
+                            state = mapState.NEIGHBOURLIST;
                             break;
                         case "nodeLinks":
-                            state = 5;
+                            state = mapState.NODELINKS;
                             String t = read.getAttributeValue(0);
                             switch(t){
                                 case "land":
@@ -79,10 +84,10 @@ public class StaxXMLLoader {
                             }
                             break;
                         case "link":
-                            state = 6;
+                            state = mapState.LINK;
                             break;
                         case "citySite":
-                            state = 7;
+                            state = mapState.CITYSITE;
                             break;
                         case "mapNode":
                             nodeNum = Integer.parseInt(read.getAttributeValue(0));
@@ -92,25 +97,21 @@ public class StaxXMLLoader {
                 // Read data between XML tags based on state, state indicates the tag we are within.
                 case XMLStreamConstants.CHARACTERS:
                     switch(state){
-                        case 0:
+                        case ZERO:
                             break;
-                        case 1:
+                        case OCEAN:
                             ocean = Boolean.parseBoolean(read.getText());
                             break;
-                        case 2:
+                        case COAST:
                             coast = Boolean.parseBoolean(read.getText());
                             break;
-                        case 3:
+                        case POPLIMIT:
                             support = Integer.parseInt(read.getText());
                             break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                        case NEIGHBOURLIST:
                             neighbours.add(new Tuple(linkType, Integer.parseInt(read.getText())));
                             break;
-                        case 7:
+                        case CITYSITE:
                             cityPoint = !read.getText().equals("");
                             break;
                         default:
@@ -137,7 +138,7 @@ public class StaxXMLLoader {
                         default:
                             break;
                     }
-                    state = 0;
+                    state = mapState.ZERO;
                     break;
                 // XML file has ended (redundant).
                 case XMLStreamConstants.END_DOCUMENT:
@@ -163,6 +164,10 @@ public class StaxXMLLoader {
         return nodes;
     }
 
+    private enum disasterType
+    {
+        FLOODPLAIN, VOLCANO
+    }
     private ArrayList<DisasterZone> loadDisasterZones(HashMap<Integer, MapNode> mapNodes) throws XMLStreamException
     {
         ArrayList<DisasterZone> zones = new ArrayList<>();
@@ -171,8 +176,8 @@ public class StaxXMLLoader {
         StreamSource s = new StreamSource(getClass().getClassLoader().getResource(disasterZonesLocationFile).getPath());
         XMLInputFactory fact = XMLInputFactory.newFactory();
         XMLStreamReader read = fact.createXMLStreamReader(s);
-        int state = 0;
-        int type = 0;
+        boolean mNode = false;
+        disasterType type = null;
         boolean running = true;
         ArrayList<MapNode> temp = new ArrayList<>();
         // Generate nodes and a list to generate neighbour data from.
@@ -190,15 +195,15 @@ public class StaxXMLLoader {
                             switch(read.getAttributeValue(0))
                             {
                                 case "flood plain":
-                                    type = 1;
+                                    type = disasterType.FLOODPLAIN;
                                     break;
                                 case "volcano":
-                                    type = 2;
+                                    type = disasterType.VOLCANO;
                                     break;
                             }
                             break;
                         case "mapNode":
-                            state = 1;
+                            mNode = true;
                         default:
                             break;
                     }
@@ -206,13 +211,8 @@ public class StaxXMLLoader {
                 // Read data between XML tags based on state, state indicates the tag we are within.
                 case XMLStreamConstants.CHARACTERS:
                     System.out.println("'"+read.getText()+"'");
-                    if(state == 0)
-                    {
-                    }
-                    else
-                    {
+                    if(mNode)
                         temp.add(mapNodes.get(Integer.parseInt(read.getText())));
-                    }
                     break;
 
                 // If we now have enough data to do something, do it.
@@ -223,10 +223,10 @@ public class StaxXMLLoader {
                         case "disasterZone":
                             switch(type)
                             {
-                                case 1:
+                                case FLOODPLAIN:
                                     zones.add(new Floodplain(temp));
                                     break;
-                                case 2:
+                                case VOLCANO:
                                     zones.add(new Volcano(temp));
                                     break;
                             }
@@ -237,7 +237,7 @@ public class StaxXMLLoader {
                             running = false;
                             break;
                     }
-                    state = 0;
+                    mNode = false;
                     break;
                 // XML file has ended (redundant).
                 case XMLStreamConstants.END_DOCUMENT:
@@ -251,13 +251,17 @@ public class StaxXMLLoader {
         return zones;
     }
 
+    private enum nationState
+    {
+        NAME, POSITION
+    }
     public ArrayList<Nation> loadNations() throws XMLStreamException
     {
         ArrayList<Nation> nations = new ArrayList<>();
         StreamSource s = new StreamSource(getClass().getClassLoader().getResource(nationsFile).getPath());
         XMLInputFactory fact = XMLInputFactory.newFactory();
         XMLStreamReader read = fact.createXMLStreamReader(s);
-        int state = 0;
+        nationState state = null;
         int nationID = 0;
         int playerNumPos = 0;
         String nationName = null;
@@ -275,10 +279,10 @@ public class StaxXMLLoader {
                             nationID = Integer.parseInt(read.getAttributeValue(0));
                             break;
                         case "name":
-                            state = 1;
+                            state = nationState.NAME;
                             break;
                         case "position":
-                            state = 2;
+                            state = nationState.POSITION;
                             playerNumPos = Integer.parseInt(read.getAttributeValue(0));
                             break;
                     }
@@ -286,13 +290,12 @@ public class StaxXMLLoader {
                 // Read data between XML tags based on state, state indicates the tag we are within.
                 case XMLStreamConstants.CHARACTERS:
                     switch(state){
-                        case 1:
+                        case NAME:
                             nationName = read.getText();
                             break;
-                        case 2:
+                        case POSITION:
                             //TODO: review Nation.java for how starting locations are stored.
                             break;
-
                     }
                     break;
                 // If we now have enough data to do something, do it.
