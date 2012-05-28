@@ -1,5 +1,6 @@
 package jCiv.fileHandling;
 
+import jCiv.CivCard;
 import jCiv.map.*;
 
 import javax.xml.stream.XMLInputFactory;
@@ -17,29 +18,27 @@ import java.util.Map;
  * Time: 19:33
  */
 public class StaxXMLLoader {
-    private final String gameMapFile;
-    private final String disasterZonesLocationFile;
-    private final String nationsFile;
 
-    public StaxXMLLoader(String mapLocation, String disasterZonesLocation, String nationsFile)
+    public StaxXMLLoader()
     {
-        this.gameMapFile = mapLocation;
-        this.disasterZonesLocationFile = disasterZonesLocation;
-        this.nationsFile = nationsFile;
+    }
+
+    private XMLStreamReader openXMLStream(String file) throws XMLStreamException
+    {
+        System.out.println("Opening:" + file);
+        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(file).getPath());
+        XMLInputFactory fact = XMLInputFactory.newFactory();
+        return fact.createXMLStreamReader(s);
     }
 
     private enum mapState
     {
         ZERO, OCEAN, COAST, POPLIMIT, NEIGHBOURLIST, NODELINKS, LINK, CITYSITE
     }
-    private HashMap<Integer, MapNode> loadMap() throws XMLStreamException
+    private HashMap<Integer, MapNode> loadMap(String gameMapFile) throws XMLStreamException
     {
         HashMap<Integer, MapNode> nodes = new HashMap<>();
-        // Create connection to XML file
-        System.out.println("Opening:" + gameMapFile);
-        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(gameMapFile).getPath());
-        XMLInputFactory fact = XMLInputFactory.newFactory();
-        XMLStreamReader read = fact.createXMLStreamReader(s);
+        XMLStreamReader read = openXMLStream(gameMapFile);
         // Create variables to hold active data in.
         HashMap<Integer, ArrayList<Tuple>> nextTo = new HashMap<>();
         ArrayList<Tuple> neighbours = new ArrayList<>();
@@ -168,14 +167,10 @@ public class StaxXMLLoader {
     {
         NULL, FLOODPLAIN, VOLCANO
     }
-    private ArrayList<DisasterZone> loadDisasterZones(HashMap<Integer, MapNode> mapNodes) throws XMLStreamException
+    private ArrayList<DisasterZone> loadDisasterZones(String disasterZonesLocationFile, HashMap<Integer, MapNode> mapNodes) throws XMLStreamException
     {
         ArrayList<DisasterZone> zones = new ArrayList<>();
-        // Create connection to XML file
-        System.out.println("Opening:" + disasterZonesLocationFile);
-        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(disasterZonesLocationFile).getPath());
-        XMLInputFactory fact = XMLInputFactory.newFactory();
-        XMLStreamReader read = fact.createXMLStreamReader(s);
+        XMLStreamReader read = openXMLStream(disasterZonesLocationFile);
         boolean mNode = false;
         disasterType type = disasterType.NULL;
         boolean running = true;
@@ -255,17 +250,15 @@ public class StaxXMLLoader {
     {
         NULL, NAME, POSITION
     }
-    public ArrayList<Nation> loadNations() throws XMLStreamException
+    public ArrayList<Nation> loadNations(String nationsFile) throws XMLStreamException
     {
         ArrayList<Nation> nations = new ArrayList<>();
-        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(nationsFile).getPath());
-        XMLInputFactory fact = XMLInputFactory.newFactory();
-        XMLStreamReader read = fact.createXMLStreamReader(s);
+        XMLStreamReader read = openXMLStream(nationsFile);
         nationState state = nationState.NULL;
         int nationID = 0;
         int playerNumPos = 0;
         String nationName = null;
-        ArrayList<Integer> startLocs = new ArrayList<>();
+        int[] startLocs = new int[7];
         boolean running = true;
         // Generate nodes and a list to generate neighbour data from.
         while(running)
@@ -294,7 +287,7 @@ public class StaxXMLLoader {
                             nationName = read.getText();
                             break;
                         case POSITION:
-                            //TODO: review Nation.java for how starting locations are stored.
+                            startLocs[playerNumPos] = Integer.parseInt(read.getText());
                             break;
                     }
                     break;
@@ -302,9 +295,11 @@ public class StaxXMLLoader {
                 case XMLStreamConstants.END_ELEMENT:
                     switch (read.getLocalName()){
                         case "nation":
-                            Nation temp = new Nation(nationID, nationName, toIntArray(startLocs));
+                            Nation temp = new Nation(nationID, nationName, startLocs);
+                            startLocs = new int[7];
                             nations.add(temp);
                     }
+                    state = nationState.NULL;
                     break;
                 // XML file has ended (redundant).
                 case XMLStreamConstants.END_DOCUMENT:
@@ -316,6 +311,102 @@ public class StaxXMLLoader {
             }
         }
         return nations;
+    }
+
+    private enum civCardState {
+        NULL, TYPE, DISCOUNT, SCORE, QUANTITY, TEXT
+    }
+
+    private ArrayList<CivCard> loadCivCards(String techCardFile) throws XMLStreamException
+    {
+        ArrayList<CivCard> output = new ArrayList<>();
+        XMLStreamReader read = openXMLStream(techCardFile);
+        String name = null, text = null;
+        ArrayList<String> type = new ArrayList<>();
+        ArrayList<Integer> discount = new ArrayList<>();
+        int max = 0, score = 0;
+        boolean running = true;
+        civCardState state =  civCardState.NULL;
+        while(running)
+        {
+            int eventCode = read.next();
+            switch(eventCode) {
+                // Starting XML element, set read state.
+                case XMLStreamConstants.START_ELEMENT:
+                    switch(read.getLocalName()){
+                        case "civCard":
+                            name = read.getAttributeValue(0);
+                            break;
+                        case "type":
+                            state = civCardState.TYPE;
+                            break;
+                        case "discount":
+                            state = civCardState.DISCOUNT;
+                            break;
+                        case "score":
+                            state = civCardState.SCORE;
+                            break;
+                        case "quantity":
+                            state = civCardState.QUANTITY;
+                            break;
+                        case "text":
+                            state = civCardState.TEXT;
+                            break;
+                    }
+                    break;
+                // Read data between XML tags based on state, state indicates the tag we are within.
+                case XMLStreamConstants.CHARACTERS:
+                    switch(state){
+                        case TYPE:
+                            type.add(read.getText());
+                            break;
+                        case DISCOUNT:
+                            discount.add(Integer.parseInt(read.getText()));
+                            break;
+                        case SCORE:
+                            score = Integer.parseInt(read.getText());
+                            break;
+                        case QUANTITY:
+                            max = Integer.parseInt(read.getText());
+                            break;
+                        case TEXT:
+                            text = read.getText();
+                            break;
+
+                    }
+                    state = civCardState.NULL;
+                    break;
+                // If we now have enough data to do something, do it.
+                case XMLStreamConstants.END_ELEMENT:
+                    switch (read.getLocalName())
+                        {
+                            case "civCard":
+                                String[] conv = new String[type.size()];
+                                type.toArray(conv);
+                                CivCard temp = new CivCard(name, conv, text, toIntArray(discount), max, score);
+                                output.add(temp);
+                                type = new ArrayList<>();
+                                discount = new ArrayList<>();
+                                text = null;
+                                break;
+                            case "cards":
+                                running = false;
+                                break;
+                            default:
+                                state = civCardState.NULL;
+                                break;
+                    }
+                    break;
+                // XML file has ended (redundant).
+                case XMLStreamConstants.END_DOCUMENT:
+                    running = false;
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown XML event.");
+
+            }
+        }
+        return output;
     }
 
     private class Tuple {
@@ -336,5 +427,6 @@ public class StaxXMLLoader {
             ret[i++] = e;
         return ret;
     }
+
 }
 
