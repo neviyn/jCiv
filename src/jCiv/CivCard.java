@@ -1,12 +1,13 @@
 package jCiv;
 
 public class CivCard {
+    private String name, text;
     private String[] type;
-    private String text;
     private int[] discount;
     private int max, score;
 
-    public CivCard(String[] type, String text, int[] discount, int max, int score) {
+    public CivCard(String name, String[] type, String text, int[] discount, int max, int score) {
+        this.name = name;
         this.type = type;
         this.text = text;
         this.discount = discount;
@@ -14,6 +15,7 @@ public class CivCard {
         this.score = score;
     }
 
+    public String getName() { return name; }
     public String[] getType() { return type; }
     public String getText() { return text; }
     public int[] getDiscount() { return discount; }
