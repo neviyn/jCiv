@@ -166,7 +166,7 @@ public class StaxXMLLoader {
 
     private enum disasterType
     {
-        FLOODPLAIN, VOLCANO
+        NULL, FLOODPLAIN, VOLCANO
     }
     private ArrayList<DisasterZone> loadDisasterZones(HashMap<Integer, MapNode> mapNodes) throws XMLStreamException
     {
@@ -177,7 +177,7 @@ public class StaxXMLLoader {
         XMLInputFactory fact = XMLInputFactory.newFactory();
         XMLStreamReader read = fact.createXMLStreamReader(s);
         boolean mNode = false;
-        disasterType type = null;
+        disasterType type = disasterType.NULL;
         boolean running = true;
         ArrayList<MapNode> temp = new ArrayList<>();
         // Generate nodes and a list to generate neighbour data from.
@@ -253,7 +253,7 @@ public class StaxXMLLoader {
 
     private enum nationState
     {
-        NAME, POSITION
+        NULL, NAME, POSITION
     }
     public ArrayList<Nation> loadNations() throws XMLStreamException
     {
@@ -261,7 +261,7 @@ public class StaxXMLLoader {
         StreamSource s = new StreamSource(getClass().getClassLoader().getResource(nationsFile).getPath());
         XMLInputFactory fact = XMLInputFactory.newFactory();
         XMLStreamReader read = fact.createXMLStreamReader(s);
-        nationState state = null;
+        nationState state = nationState.NULL;
         int nationID = 0;
         int playerNumPos = 0;
         String nationName = null;
