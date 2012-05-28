@@ -78,8 +78,9 @@ public class JCivClient extends Canvas implements Runnable {
 		for (int i = 0; i < WIDTH * HEIGHT; i++) {
 			pixels[i] = screen.pixels[i];
 		}
-
+				
 		Graphics g = bs.getDrawGraphics();
+				
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(img, 0, 0, WIDTH, HEIGHT, null);
 		g.dispose();

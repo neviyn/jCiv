@@ -1,6 +1,8 @@
 package jCiv.client.gui;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import jCiv.client.Art;
 
@@ -99,60 +101,22 @@ public class Bitmap {
 	 *            The color you want the string to appear.
 	 */
 	public void render(String string, int x, int y, int color) {
-		string = string.toUpperCase();
-		for (int c = 0; c < string.length(); c++) {
-			int index = chars.indexOf(string.charAt(c));
-			if (index != -1) {
-				for (int i = 0; i < fontSize; i++) {
-					int ny = y + i;
-					if (ny < height) {
-						for (int j = 0; j < fontSize; j++) {
-							int nx = x + j + ((fontSize + 2) * c);
-							if (nx < width) {
-								int srcX = ((index * fontSize) % Art.font.width)
-										+ j;
-								int srcY = (((index * fontSize) / Art.font.width) * fontSize)
-										+ i;
-
-								int srcPixel = Art.font.pixels[srcX
-										+ (srcY * Art.font.width)];
-								if (srcPixel != Color.MAGENTA.getRGB()) {
-									pixels[nx + (ny * width)] = color;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		img.setRGB(0, 0, width, height, pixels, 0, width);
+		Graphics g = img.getGraphics();
+		g.setColor(Color.decode(""+color));
+		g.setFont(Art.romanFont.deriveFont(20.0f));
+		g.drawChars(string.toCharArray(), 0, string.length(), x, y+20);
+		img.getRGB(0, 0, width, height, pixels, 0, width);
 	}
 	
-	public void render(String string, int x, int y, int color, double scale) {
-		string = string.toUpperCase();
-		for (int c = 0; c < string.length(); c++) {
-			int index = chars.indexOf(string.charAt(c));
-			if (index != -1) {
-				for (int i = 0; i < fontSize*scale; i++) {
-					int ny = y + i;
-					if (ny < height) {
-						for (int j = 0; j < fontSize*scale; j++) {
-							int nx = (x + j + (((int)(fontSize*scale) + (int)(2*scale)) * c));
-							if (nx < width) {
-								int srcX = ((index * fontSize) % Art.font.width)
-										+ (int)(j / scale);
-								int srcY = (((index * fontSize) / Art.font.width) * fontSize)
-										+ (int)(i / scale);
-
-								int srcPixel = Art.font.pixels[srcX
-										+ (srcY * Art.font.width)];
-								if (srcPixel != Color.MAGENTA.getRGB()) {
-									pixels[nx + (ny * width)] = color;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+	public void render(String string, int x, int y, int color, float size) {
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		img.setRGB(0, 0, width, height, pixels, 0, width);
+		Graphics g = img.getGraphics();
+		g.setColor(Color.decode(""+color));
+		g.setFont(Art.romanFont.deriveFont(size));
+		g.drawChars(string.toCharArray(), 0, string.length(), x, (int)(y+size));
+		img.getRGB(0, 0, width, height, pixels, 0, width);
 	}
 }
