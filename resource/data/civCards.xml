@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cards>
+    <civCard name="Spiritualism">
+        <group>
+			<type>Art</type>
+			<discount>5</discount>
+		</group>
+		<group>
+			<type>Science</type>
+			<discount>20</type>
+		</group>
+        <score>30</score>
+        <text />
+		<quantity>3</quantity>
+    </civCard>
+    <civCard name="Theatre">
+        <group>
+			<type>Art</type>
+			<discount>5</discount>
+		</group>
+        <score>60</score>
+        <text>Counts 20 towards Education</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Music">
+        <group>
+			<type>Art</type>
+			<discount>5</discount>
+		</group>
+        <score>60</score>
+        <text>Counts 30 towards Philosophy</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Planning">
+        <group>
+			<type>Art</type>
+			<discount>5</discount>
+		</group>
+		<group>
+			<type>Civic</type>
+			<discount>0</discount>
+		</group>
+        <score>80</score>
+        <text>Counts 15 towards any Civic</text>
+		<quantity>6</quantity>
+    </civCard>
+    <civCard name="Farming">
+        <group>
+			<type>Craft</type>
+			<discount>10</discount>
+        </group>
+        <score>110</score>
+        <text>Permits an increase in population</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Weaving">
+        <group>
+			<type>Craft</type>
+			<discount>10</discount>
+		</group>
+        <score>45</score>
+        <text>Ships allowed an extra move</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Ceramics">
+        <group>
+			<type>Craft</type>
+			<discount>10</discount>
+		</group>
+        <score>45</score>
+        <text>With Grain, reduces the effects of Famine</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Metalworking">
+        <group>
+			<type>Craft</type>
+			<discount>10</discount>
+		</group>
+        <score>80</score>
+        <text>Gives an advantage in battle</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Construction">
+        <group>
+			<type>Craft</type>
+			<discount>10</discount>
+		</group>
+		<group>
+			<type>Science</type>
+			<discount>20</discount>
+		</group>
+        <score>140</score>
+        <text>Strengthens city defences and reduces the effects of Flood</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Currency">
+        <group>
+			<type>Science</type>
+			<discount>20</discount>
+		</group>
+        <score>110</score>
+        <text>Allows change in taxation</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Healing">
+        <group>
+			<type>Science</type>
+			<discount>20</discount>
+		</group>
+        <score>140</score>
+        <text>Reduces effects of Epidemic</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Stargazing">
+        <group>
+			<type>Science</type>
+			<discount>20</discount>
+		</group>
+        <score>80</score>
+        <text>Permits voyages across open seas</text>
+		<quantity>4</quantity>
+    </civCard>
+    <civCard name="Education">
+		<group>
+			<type>Art</type>
+			<discount>5</discount>
+		</group>
+		<group>
+			<type>Civic</type>
+			<discount>0</discount>
+		</group>        
+		<score>110</score>
+        <text>Counts 25 towards Law, Democracy and Philosophy</text>
+		<quantity>6</quantity>
+    </civCard>
+    <civCard name="Democracy">
+        <group>
+			<type>Civic</type>
+			<discount>0</discount>
+		</group>
+        <score>200</score>
+        <receiveDiscount>Craft</receiveDiscount>
+        <text>Reduces the effects of Civil War &amp; Civil Disorder</text>
+		<quantity>5</quantity>
+    </civCard>
+    <civCard name="Philosophy">
+        <group>
+			<type>Civic</type>
+			<discount>0</discount>
+		</group>
+        <score>240</score>
+		<receiveDiscount>Science</receiveDiscount>
+        <text>Reduces the effects of Iconoclasm &amp; Heresy and modifies Civil War</text>
+		<quantity>5</quantity>
+    </civCard>
+    <civCard name="Law">
+        <group>
+			<type>Civic</type>
+			<discount>0</discount>
+		</group>
+        <score>170</score>
+        <receiveDiscount>Art</receiveDiscount>
+        <text>Required for Democracy and Philosophy. Reduces the effects off Civil Disorder, Iconoclasm &amp; Heresy</text>
+		<quantity>7</quantity>
+    </civCard>
+</cards>
