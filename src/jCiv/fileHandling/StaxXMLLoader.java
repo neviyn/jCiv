@@ -25,7 +25,6 @@ public class StaxXMLLoader {
 
     private XMLStreamReader openXMLStream(String file) throws XMLStreamException
     {
-        System.out.println("Opening:" + file);
         StreamSource s = new StreamSource(getClass().getClassLoader().getResource(file).getPath());
         XMLInputFactory fact = XMLInputFactory.newFactory();
         return fact.createXMLStreamReader(s);
