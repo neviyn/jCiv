@@ -7,7 +7,7 @@
 		</group>
 		<group>
 			<type>Science</type>
-			<discount>20</type>
+			<discount>20</discount>
 		</group>
         <score>30</score>
         <text />
