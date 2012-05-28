@@ -8,21 +8,18 @@ package jCiv;
  */
 public class TradingCard {
     private String name;
-    private int multiplier, sizeOfSet;
+    private int maxSetSize;
 
     /**
      * An object representing a single trading card.
      * @param name the name of the card.
-     * @param multiplier the multiplier for set bonuses.
-     * @param sizeOfSet the max size of each set.
+     * @param maxSetSize the max size of each set.
      */
-    public TradingCard(String name, int multiplier, int sizeOfSet) {
+    public TradingCard(String name, int maxSetSize) {
         this.name = name;
-        this.multiplier = multiplier;
-        this.sizeOfSet = sizeOfSet;
+        this.maxSetSize = maxSetSize;
     }
-
+    //NOTE: formula for set value is: "value * (quantity^2)"
     public String getName() { return name; }
-    public int getMultiplier() { return multiplier; }
-    public int getSizeOfSet() { return sizeOfSet; }
+    public int getMaxSetSize() { return maxSetSize; }
 }
