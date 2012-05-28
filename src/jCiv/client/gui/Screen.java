@@ -32,9 +32,9 @@ public class Screen extends Bitmap {
 		fill(Color.BLUE.getRGB());
 		
 		render(Art.bottomBar, 0, height - 208, 2);
-		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 128, Color.GREEN.getRGB(), 2);
-		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 64, Color.GREEN.getRGB(), 1);
-		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 8, Color.GREEN.getRGB(), 0.5);
+		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 128, Color.GREEN.getRGB(), 20.0f);
+		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 64, Color.GREEN.getRGB(), 12.0f);
+		render("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, height - 208 - 8, Color.GREEN.getRGB(), 8.0f);
 	}
 		
 	public void renderMap(JCivMap map) {
