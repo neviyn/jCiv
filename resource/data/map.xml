@@ -423,4 +423,99 @@
 			</nodeLinks>
 		</neighbourList>
 	</mapNode>
+	<mapNode id="26">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>23</link>
+				<link>25</link>
+				<link>27</link>
+				<link>28</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>22</link>
+				<link>23</link>
+				<link>28</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="27">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>25</link>
+				<link>26</link>
+				<link>28</link>
+				<link>55</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>28</link>
+				<link>55</link>
+				<link>128</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="28">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>26</link>
+				<link>27</link>
+				<link>32</link>
+				<link>29</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>22</link>
+				<link>26</link>
+				<link>29</link>
+				<link>124</link>
+				<link>32</link>
+				<link>27</link>
+				<link>128</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="29">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>2</popLimit>
+		<citySite>Corinth</citySite>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>28</link>
+				<link>30</link>
+				<link>31</link>
+				<link>32</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>28</link>
+				<link>30</link>
+				<link>124</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
+	<mapNode id="30">
+		<ocean>false</ocean>
+		<coast>true</coast>
+		<popLimit>1</popLimit>
+		<citySite>Sparta</citySite>
+		<neighbourList>		
+			<nodeLinks type="land">			
+				<link>29</link>
+				<link>31</link>
+			</nodeLinks>
+			<nodeLinks type="sea">
+				<link>29</link>
+				<link>31</link>
+				<link>35</link>
+				<link>124</link>
+			</nodeLinks>
+		</neighbourList>
+	</mapNode>
 </map>

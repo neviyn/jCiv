@@ -9,6 +9,9 @@ package jCiv.map;
 public class NodeLink {
     private int linkType;
     private MapNode target;
+    
+    public static int LAND_LINK = 0;
+    public static int SEA_LINK = 1;
 
     public NodeLink(int linkType, MapNode target)
     {

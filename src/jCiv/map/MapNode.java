@@ -69,4 +69,21 @@ public class MapNode{
     {
         cityBuilt = -1;
     }
+    
+    @Override
+    public String toString()
+    {
+    	String result = "";
+    	result += "\nID: " + nodeNum;
+    	result += "\nOcean: " + ocean;
+    	result += "\nCoast: " + coast;
+    	result += "\nPopulation limit: " + support;
+    	result += "\nCity site: " + cityPoint;
+    	result += "\nNeighbours:";
+    	for (NodeLink n : neighbours) {
+    		result += "\n\tType: " + n.getLinkType() + "\tLink: " + n.getNeighbour().nodeNum;
+    	}
+    	
+    	return result;
+    }
 }
