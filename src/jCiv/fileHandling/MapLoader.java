@@ -109,6 +109,10 @@ public class MapLoader extends XMLLoader {
 		map = new JCivMap(mapNodes, null);
 	}
 	
+	/**
+	 * lists all the neighbours linked to a node, by the type of the link, and the ID of the target.
+	 *
+	 */
 	private class NeighbourList {
 		// key is link type (i.e. sea or land), val is list of ids of neighbours:  
 		private ArrayList<Neighbour> neighbours;
