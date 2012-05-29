@@ -37,6 +37,10 @@ public class JCivMap {
 		for (int i : map.keySet()) {
 			result += map.get(i);
 		}
+		result += "\nDisasters:\n";
+		for (DisasterZone d : disasterZones) {
+			result += d.toString();
+		}
 		
 		return result;
 	}

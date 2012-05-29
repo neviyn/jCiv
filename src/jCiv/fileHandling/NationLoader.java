@@ -25,11 +25,10 @@ public class NationLoader extends XMLLoader {
 	 * @param filename the file name of the XML document to be loaded and parsed.
 	 */
 	public NationLoader(String filename) 
-		throws IOException, SAXException, ParserConfigurationException
+		throws IOException, SAXException, ParserConfigurationException, XMLParseException
 	{
 		nations = new ArrayList<Nation>();
-		doc = loadDocument(filename);
-		parse();
+		loadDocument(filename);
 	}
 	
 	/**
@@ -46,6 +45,7 @@ public class NationLoader extends XMLLoader {
 	 */
 	@Override
 	protected void parse()
+		throws NationXMLParseException
 	{
 		NodeList nationsList = doc.getElementsByTagName("nation");
 		for (int i=0; i<nationsList.getLength(); i++) {
@@ -63,6 +63,13 @@ public class NationLoader extends XMLLoader {
 				startingPositions[noPlayers] = Integer.parseInt(val);
 			}
 			nations.add(new Nation(nationID, nationName, startingPositions));
+		}
+	}
+	
+	private class NationXMLParseException extends XMLParseException {
+		public NationXMLParseException(String msg)
+		{
+			super(msg);
 		}
 	}
 }

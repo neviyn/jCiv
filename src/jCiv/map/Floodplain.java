@@ -1,6 +1,7 @@
 package jCiv.map;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * User: nathan
@@ -9,9 +10,15 @@ import java.util.ArrayList;
  */
 public class Floodplain extends DisasterZone{
 
-    public Floodplain(ArrayList<MapNode> zones)
+    public Floodplain(ArrayList<MapNode> zones, HashMap<MapNode, Boolean> affectedCities)
     {
-        super(zones);
+        super(zones, affectedCities);
+    }
+    
+    @Override
+    public String toString()
+    {
+    	return "\nFlood plain:\n" + super.toString();
     }
 
 }
