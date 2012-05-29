@@ -23,4 +23,10 @@ public class Volcano extends DisasterZone{
     	}
     	return result;
     }
+    
+    @Override
+    public String toString()
+    {
+    	return "\nVolcano:\n" + super.toString();
+    }
 }

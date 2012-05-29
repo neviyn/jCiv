@@ -77,4 +77,18 @@ public abstract class DisasterZone {
     	}
     	return found;
     }
+    
+    @Override
+    public String toString()
+    {
+    	String result = "\tAffected nodes:";
+    	for (MapNode n : zones) {
+    		result += "\n\t\tID:" + n.nodeNum;
+    		if (cityAffected.get(n)) {
+    			result += " (city is affected)";
+    		}
+    	}
+    	
+    	return result;
+    }
 }

@@ -14,5 +14,11 @@ public class Floodplain extends DisasterZone{
     {
         super(zones, affectedCities);
     }
+    
+    @Override
+    public String toString()
+    {
+    	return "\nFlood plain:\n" + super.toString();
+    }
 
 }
