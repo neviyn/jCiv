@@ -520,49 +520,47 @@
 	</mapNode>
 	
 	
-	<disasterZones>
-		<disasterZone id="1">
-			<type>volcano</type>
-			<mapNode cityAffected="true">19</mapNode>
-			<mapNode>20</mapNode>
-		</disasterZone>
-		<disasterZone id="2">
-			<type>volcano</type>
-			<mapNode cityAffected="true">120</mapNode>
-			<mapNode>121</mapNode>
-		</disasterZone>
-		<disasterZone id="3">
-			<type>volcano</type>
-			<mapNode cityAffected="true">34</mapNode>
-		</disasterZone>
-		<disasterZone id="4">
-			<type>floodplain</type>
-			<mapNode>12</mapNode>
-			<mapNode>13</mapNode>
-		</disasterZone>
-		<disasterZone id="5">
-			<type>floodplain</type>
-			<mapNode>6</mapNode>
-			<mapNode cityAffected="true">7</mapNode>
-			<mapNode cityAffected="false">57</mapNode>
-		</disasterZone>
-		<disasterZone id="6">
-			<type>floodplain</type>
-			<mapNode>100</mapNode>
-			<mapNode cityAffected="true">101</mapNode>
-			<mapNode cityAffected="true">102</mapNode>
-			<mapNode cityAffected="true">103</mapNode>
-			<mapNode cityAffected="true">104</mapNode>
-		</disasterZone>	
-		<disasterZone id="7">
-			<type>floodplain</type>
-			<mapNode cityAffected="false">71</mapNode>
-			<mapNode>72</mapNode>
-			<mapNode cityAffected="true">73</mapNode>
-			<mapNode cityAffected="true">74</mapNode>
-			<mapNode>75</mapNode>
-			<mapNode>82</mapNode>
-			<mapNode cityAffected="true">83</mapNode>
-		</disasterZone>
-	</disasterZones>
+	<disasterZone id="1">
+		<type>volcano</type>
+		<affectedMapNode cityAffected="true">19</affectedMapNode>
+		<affectedMapNode>20</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="2">
+		<type>volcano</type>
+		<affectedMapNode cityAffected="true">120</affectedMapNode>
+		<affectedMapNode>121</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="3">
+		<type>volcano</type>
+		<affectedMapNode cityAffected="true">34</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="4">
+		<type>floodplain</type>
+		<affectedMapNode>12</affectedMapNode>
+		<affectedMapNode>13</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="5">
+		<type>floodplain</type>
+		<affectedMapNode>6</affectedMapNode>
+		<affectedMapNode cityAffected="true">7</affectedMapNode>
+		<affectedMapNode cityAffected="false">57</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="6">
+		<type>floodplain</type>
+		<affectedMapNode>100</affectedMapNode>
+		<affectedMapNode cityAffected="true">101</affectedMapNode>
+		<affectedMapNode cityAffected="true">102</affectedMapNode>
+		<affectedMapNode cityAffected="true">103</affectedMapNode>
+		<affectedMapNode cityAffected="true">104</affectedMapNode>
+	</disasterZone>	
+	<disasterZone id="7">
+		<type>floodplain</type>
+		<affectedMapNode cityAffected="false">71</affectedMapNode>
+		<affectedMapNode>72</affectedMapNode>
+		<affectedMapNode cityAffected="true">73</affectedMapNode>
+		<affectedMapNode cityAffected="true">74</affectedMapNode>
+		<affectedMapNode>75</affectedMapNode>
+		<affectedMapNode>82</affectedMapNode>
+		<affectedMapNode cityAffected="true">83</affectedMapNode>
+	</disasterZone>
 </map>

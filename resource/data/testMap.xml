@@ -147,4 +147,20 @@
 			</nodeLinks>
 		</neighbourList>
 	</mapNode>
+	
+	<disasterZone id="3">
+		<type>volcano</type>
+		<affectedMapNode cityAffected="true">8</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="4">
+		<type>floodplain</type>
+		<affectedMapNode>2</affectedMapNode>
+		<affectedMapNode>3</affectedMapNode>
+	</disasterZone>
+	<disasterZone id="5">
+		<type>floodplain</type>
+		<affectedMapNode>6</affectedMapNode>
+		<affectedMapNode cityAffected="true">7</affectedMapNode>
+		<affectedMapNode cityAffected="false">8</affectedMapNode>
+	</disasterZone>
 </map>
