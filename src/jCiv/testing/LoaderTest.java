@@ -23,6 +23,9 @@ public class LoaderTest {
             for (Nation n : ns) {
             	System.out.println(n);
             }
+        } catch (XMLParseException xe) {
+        	System.err.println("Unexpected XML structure found while parsing document: " + filename);
+        	xe.printStackTrace(System.err);
         } catch (IOException ie) {
         	System.err.println("Failed to load document: " + filename);
         	ie.printStackTrace(System.err);
@@ -39,6 +42,9 @@ public class LoaderTest {
             MapLoader ml = new MapLoader(filename);
             JCivMap map = ml.getMap();
             System.out.println(map);
+        } catch (XMLParseException xe) {
+        	System.err.println("Unexpected XML structure found while parsing document: " + filename);
+        	xe.printStackTrace(System.err);
         } catch (IOException ie) {
         	System.err.println("Failed to load document: " + filename);
         	ie.printStackTrace(System.err);

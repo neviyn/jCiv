@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -15,8 +14,8 @@ public abstract class XMLLoader {
 
 	protected Document doc;
 	
-	protected Document loadDocument(String filename)
-		throws SAXException, IOException, ParserConfigurationException
+	protected void loadDocument(String filename)
+		throws XMLParseException, SAXException, IOException, ParserConfigurationException
 	{
 		doc = null;
 		try {
@@ -32,8 +31,14 @@ public abstract class XMLLoader {
 			throw pe;
 		} 
 		doc.getDocumentElement().normalize();
-		return doc;
+		
+		try {
+			parse();
+		} catch (XMLParseException xe) {
+			System.err.println("Incorrect structure found while parsing document: " + filename);
+			throw xe;
+		} 
 	}
 	
-	protected abstract void parse();
+	protected abstract void parse() throws XMLParseException;
 }

@@ -27,14 +27,14 @@ public class MapLoader extends XMLLoader {
 	 * Load and parse a nations XML file.
 	 * 
 	 * @param filename the file name of the XML document to be loaded and parsed.
+	 * @throws XMLParseException 
 	 */
 	public MapLoader(String filename) 
-		throws IOException, SAXException, ParserConfigurationException
+		throws IOException, SAXException, ParserConfigurationException, XMLParseException
 	{
 			mapNodes = new HashMap<Integer, MapNode>();
 			disasterZones = new Vector<DisasterZone>();
-			doc = loadDocument(filename);
-			parse();
+			loadDocument(filename);
 	}
 	
 	public JCivMap getMap()
@@ -44,6 +44,7 @@ public class MapLoader extends XMLLoader {
 	
 	@Override
 	protected void parse() 
+		throws MapXMLParseException 
 	{
 		NodeList mapNodesNodeList = doc.getElementsByTagName("mapNode");
 		HashMap<MapNode, NeighbourList> neighboursLists = new HashMap<MapNode, NeighbourList>();
@@ -106,7 +107,42 @@ public class MapLoader extends XMLLoader {
 			}
 		}
 		
-		map = new JCivMap(mapNodes, null);
+		// parse the disaster zones
+		NodeList disasterZoneNodeList = doc.getElementsByTagName("disasterZone");
+		for (int i=0; i<disasterZoneNodeList.getLength(); i++) {
+			Element disasterZoneElem = (Element) disasterZoneNodeList.item(i);
+			
+			ArrayList<MapNode> affectedZones = new ArrayList<MapNode>();
+			HashMap<MapNode, Boolean> affectedCities = new HashMap<MapNode, Boolean>();
+			NodeList affectedMapNodeNodeList = disasterZoneElem.getElementsByTagName("affectedMapNode");
+			for (int j=0; j<affectedMapNodeNodeList.getLength(); j++) {
+				Element affectedMapNodeElem = (Element) affectedMapNodeNodeList.item(j);
+				int affectedZone = Integer.parseInt(affectedMapNodeElem.getChildNodes().item(0).getNodeValue());
+				boolean cityAffected = false;
+				if (affectedMapNodeElem.hasAttribute("cityAffected")) {
+					cityAffected = Boolean.parseBoolean(affectedMapNodeElem.getAttribute("cityAffected"));
+				}
+				MapNode mn = mapNodes.get(affectedZone);
+				affectedZones.add(mn);
+				affectedCities.put(mn, cityAffected);
+			}
+			
+			DisasterZone disasterZone;
+			String type = disasterZoneElem.getElementsByTagName("type").item(0).getChildNodes().item(0).getNodeValue();
+			switch (type) {
+			case ("volcano"):
+				disasterZone = new Volcano(affectedZones);
+				break;
+			case ("floodplain"):
+				disasterZone = new Floodplain(affectedZones, affectedCities);
+				break;
+			default:
+				throw new MapXMLParseException("Unknown disaster type");
+			}
+			disasterZones.add(disasterZone);
+		}
+		
+		map = new JCivMap(mapNodes, disasterZones);
 	}
 	
 	/**
@@ -145,6 +181,13 @@ public class MapLoader extends XMLLoader {
 		public Neighbour(int type, int neighbourID) {
 			this.type = type;
 			link = neighbourID;
+		}
+	}
+	
+	private class MapXMLParseException extends XMLParseException {
+		public MapXMLParseException(String msg)
+		{
+			super(msg);
 		}
 	}
 }
