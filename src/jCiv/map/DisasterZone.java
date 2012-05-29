@@ -1,6 +1,7 @@
 package jCiv.map;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * User: nathan
@@ -8,11 +9,19 @@ import java.util.ArrayList;
  * Time: 13:42
  */
 public abstract class DisasterZone {
-    private ArrayList<MapNode> zones;
+    private final ArrayList<MapNode> zones;
+    private final HashMap<MapNode, Boolean> cityAffected;
 
-    public DisasterZone(ArrayList<MapNode> zones)
+    /**
+     * 
+     * @param zones
+     * @param cityAffected each value should be true if the node has a city site which is affected 
+     * 	      by the disaster, and false otherwise (in practice this will only affect flood plains)
+     */
+    public DisasterZone(ArrayList<MapNode> zones, HashMap<MapNode, Boolean> cityAffected)
     {
         this.zones = zones;
+        this.cityAffected = cityAffected;
     }
 
     /**
@@ -35,6 +44,22 @@ public abstract class DisasterZone {
             // TODO: Add code for checking if a map node contains tokens of a certain player.
         }
         return found;
+    }
+    
+    /**
+     * @param nodeID the id of the node to be checked
+     * @return true iff the given node is within this disaster zone, the node contains a
+     * 		   city site, and the city site is affected by the disaster.
+     */
+    public boolean cityIsAffected(int nodeID)
+    {
+    	boolean affected = false;
+    	for (MapNode n : zones) {
+    		if (n.nodeNum == nodeID && cityAffected.get(n)) {
+    			affected = true;
+    		}
+    	}
+    	return affected;
     }
     
     /**
