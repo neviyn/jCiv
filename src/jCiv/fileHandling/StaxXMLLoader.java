@@ -8,6 +8,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,32 +25,34 @@ public class StaxXMLLoader {
     {
     }
 
-    private XMLStreamReader openXMLStream(String file) throws XMLStreamException
+    private XMLStreamReader openXMLStream(String file) throws XMLStreamException, FileNotFoundException
     {
-        StreamSource s = new StreamSource(getClass().getClassLoader().getResource(file).getPath());
+        StreamSource s;
+        try {
+            s = new StreamSource(getClass().getClassLoader().getResource(file).getPath());
+        } catch (NullPointerException ex) {
+            throw new FileNotFoundException("Could not open XML file!");
+        }
         XMLInputFactory fact = XMLInputFactory.newFactory();
         return fact.createXMLStreamReader(s);
     }
 
-    private enum mapState
-    {
-        ZERO, OCEAN, COAST, POPLIMIT, NEIGHBOURLIST, NODELINKS, LINK, CITYSITE
+    private enum dType{
+        VOLCANO, FLOODPLAIN
     }
-    private HashMap<Integer, MapNode> loadMap(String gameMapFile) throws XMLStreamException
+    public JCivMap loadMap(String gameMapFile) throws XMLStreamException, FileNotFoundException
     {
         HashMap<Integer, MapNode> nodes = new HashMap<>();
+        ArrayList<DisasterZone> zones = new ArrayList<>();
         XMLStreamReader read = openXMLStream(gameMapFile);
         // Create variables to hold active data in.
         HashMap<Integer, ArrayList<Tuple>> nextTo = new HashMap<>();
+        HashMap<MapNode, Boolean> floodSpecial = new HashMap<>();
+        ArrayList<MapNode> disasterArea = new ArrayList<>();
         ArrayList<Tuple> neighbours = new ArrayList<>();
-        mapState state = mapState.ZERO;
-        int nodeNum = -1;
-        boolean ocean = false;
-        boolean coast = false;
-        int support = -1;
-        boolean cityPoint = false;
-        int linkType = -1;
-        boolean running = true;
+        dType disasterType = null;
+        int nodeNum = -1, support = -1, linkType = -1;
+        boolean ocean = false, coast = false, cityPoint = false, running = true;
         // Generate nodes and a list to generate neighbour data from.
         while(running)
         {
@@ -59,19 +62,20 @@ public class StaxXMLLoader {
                 case XMLStreamConstants.START_ELEMENT:
                     switch(read.getLocalName()){
                         case "ocean":
-                            state = mapState.OCEAN;
+                            read.next();
+                            ocean = Boolean.parseBoolean(read.getText());
                             break;
                         case "coast":
-                            state = mapState.COAST;
+                            read.next();
+                            coast = Boolean.parseBoolean(read.getText());
                             break;
                         case "popLimit":
-                            state = mapState.POPLIMIT;
+                            read.next();
+                            support = Integer.parseInt(read.getText());
                             break;
                         case "neighbourList":
-                            state = mapState.NEIGHBOURLIST;
                             break;
                         case "nodeLinks":
-                            state = mapState.NODELINKS;
                             String t = read.getAttributeValue(0);
                             switch(t){
                                 case "land":
@@ -83,43 +87,52 @@ public class StaxXMLLoader {
                             }
                             break;
                         case "link":
-                            state = mapState.LINK;
+                            read.next();
+                            neighbours.add(new Tuple(linkType, Integer.parseInt(read.getText())));
                             break;
                         case "citySite":
-                            state = mapState.CITYSITE;
+                            read.next();
+                            cityPoint = !read.getText().equals("");
                             break;
                         case "mapNode":
                             nodeNum = Integer.parseInt(read.getAttributeValue(0));
                             break;
+                        case "disasterZone":
+                            break;
+                        case "type":
+                            read.next();
+                            switch(read.getText()){
+                                case "volcano":
+                                    disasterType = dType.VOLCANO;
+                                    break;
+                                case "floodplain":
+                                    disasterType = dType.FLOODPLAIN;
+                                    break;
+                            }
+                            break;
+                        case "affectedMapNode":
+                            boolean temp = false;
+                            if(disasterType == dType.FLOODPLAIN && read.getAttributeCount() > 0)
+                            {
+                                temp = Boolean.parseBoolean(read.getAttributeValue(0));
+                            }
+                            read.next();
+                            switch (disasterType){
+                                case VOLCANO:
+                                    disasterArea.add(nodes.get(Integer.parseInt(read.getText())));
+                                    break;
+                                case FLOODPLAIN:
+                                    MapNode active = nodes.get(Integer.parseInt(read.getText()));
+                                    disasterArea.add(active);
+                                    floodSpecial.put(active, temp);
+                            }
+                            break;
+
+                        default:
+                            break;
                     }
                     break;
-                // Read data between XML tags based on state, state indicates the tag we are within.
                 case XMLStreamConstants.CHARACTERS:
-                    switch(state){
-                        case ZERO:
-                            break;
-                        case OCEAN:
-                            ocean = Boolean.parseBoolean(read.getText());
-                            break;
-                        case COAST:
-                            coast = Boolean.parseBoolean(read.getText());
-                            break;
-                        case POPLIMIT:
-                            support = Integer.parseInt(read.getText());
-                            break;
-                        case LINK:
-                            neighbours.add(new Tuple(linkType, Integer.parseInt(read.getText())));
-                            break;
-                        case CITYSITE:
-                            cityPoint = !read.getText().equals("");
-                            break;
-                        case NEIGHBOURLIST:
-                            break;
-                        case NODELINKS:
-                            break;
-                        default:
-                            throw new IllegalStateException("Unknown state based on XML tag!");
-                    }
                     break;
                 // If we now have enough data to do something, do it.
                 case XMLStreamConstants.END_ELEMENT:
@@ -135,13 +148,26 @@ public class StaxXMLLoader {
                             neighbours = new ArrayList<>();
                             break;
                         // XML file has ended.
+                        case "disasterZone":
+                            switch (disasterType){
+                                case VOLCANO:
+                                    Volcano vTemp = new Volcano(disasterArea);
+                                    zones.add(vTemp);
+                                    break;
+                                case FLOODPLAIN:
+                                    Floodplain fTemp = new Floodplain(disasterArea, floodSpecial);
+                                    zones.add(fTemp);
+                                    floodSpecial = new HashMap<>();
+                                    break;
+                            }
+                            disasterArea = new ArrayList<>();
+                            break;
                         case "map":
                             running = false;
                             break;
                         default:
                             break;
                     }
-                    state = mapState.ZERO;
                     break;
                 // XML file has ended (redundant).
                 case XMLStreamConstants.END_DOCUMENT:
@@ -164,99 +190,14 @@ public class StaxXMLLoader {
             }
 
         }
-        return nodes;
+        return new JCivMap(nodes, new Vector<>(zones));
     }
 
-    private enum disasterType
-    {
-        NULL, FLOODPLAIN, VOLCANO
-    }
-    private ArrayList<DisasterZone> loadDisasterZones(String disasterZonesLocationFile, HashMap<Integer, MapNode> mapNodes) throws XMLStreamException
-    {
-        ArrayList<DisasterZone> zones = new ArrayList<>();
-        XMLStreamReader read = openXMLStream(disasterZonesLocationFile);
-        boolean mNode = false;
-        disasterType type = disasterType.NULL;
-        boolean running = true;
-        ArrayList<MapNode> temp = new ArrayList<>();
-        // Generate nodes and a list to generate neighbour data from.
-        while(running)
-        {
-            int eventCode = read.next();
-            switch(eventCode) {
-                // Starting XML element, set read state.
-                case XMLStreamConstants.START_ELEMENT:
-                    switch(read.getLocalName())
-                    {
-                        case "disasterZoneList":
-                            switch(read.getAttributeValue(0))
-                            {
-                                case "flood plain":
-                                    type = disasterType.FLOODPLAIN;
-                                    break;
-                                case "volcano":
-                                    type = disasterType.VOLCANO;
-                                    break;
-                            }
-                            break;
-                        case "mapNode":
-                            mNode = true;
-                        default:
-                            break;
-                    }
-                    break;
-                // Read data between XML tags based on state, state indicates the tag we are within.
-                case XMLStreamConstants.CHARACTERS:
-                    if(mNode)
-                        temp.add(mapNodes.get(Integer.parseInt(read.getText())));
-                    break;
-
-                // If we now have enough data to do something, do it.
-                case XMLStreamConstants.END_ELEMENT:
-                    switch(read.getLocalName())
-                    {
-                        case "disasterZone":
-                            switch(type)
-                            {
-                                case FLOODPLAIN:
-                                    zones.add(new Floodplain(temp));
-                                    break;
-                                case VOLCANO:
-                                    zones.add(new Volcano(temp));
-                                    break;
-                            }
-                            temp = new ArrayList<>();
-                            break;
-                        case "disasterZones":
-                            // XML file has ended.
-                            running = false;
-                            break;
-                    }
-                    mNode = false;
-                    break;
-                // XML file has ended (redundant).
-                case XMLStreamConstants.END_DOCUMENT:
-                    running = false;
-                    break;
-                default:
-                    throw new IllegalStateException("Unknown XML event.");
-
-            }
-        }
-        return zones;
-    }
-
-    private enum nationState
-    {
-        NULL, NAME, POSITION
-    }
-    public ArrayList<Nation> loadNations(String nationsFile) throws XMLStreamException
+    public ArrayList<Nation> loadNations(String nationsFile) throws XMLStreamException, FileNotFoundException
     {
         ArrayList<Nation> nations = new ArrayList<>();
         XMLStreamReader read = openXMLStream(nationsFile);
-        nationState state = nationState.NULL;
         int nationID = 0;
-        int playerNumPos = 0;
         String nationName = null;
         int[] startLocs = new int[7];
         boolean running = true;
@@ -272,24 +213,17 @@ public class StaxXMLLoader {
                             nationID = Integer.parseInt(read.getAttributeValue(0));
                             break;
                         case "name":
-                            state = nationState.NAME;
-                            break;
-                        case "position":
-                            state = nationState.POSITION;
-                            playerNumPos = Integer.parseInt(read.getAttributeValue(0));
-                            break;
-                    }
-                    break;
-                // Read data between XML tags based on state, state indicates the tag we are within.
-                case XMLStreamConstants.CHARACTERS:
-                    switch(state){
-                        case NAME:
+                            read.next();
                             nationName = read.getText();
                             break;
-                        case POSITION:
+                        case "position":
+                            int playerNumPos = Integer.parseInt(read.getAttributeValue(0));
+                            read.next();
                             startLocs[playerNumPos] = Integer.parseInt(read.getText());
                             break;
                     }
+                    break;
+                case XMLStreamConstants.CHARACTERS:
                     break;
                 // If we now have enough data to do something, do it.
                 case XMLStreamConstants.END_ELEMENT:
@@ -299,7 +233,6 @@ public class StaxXMLLoader {
                             startLocs = new int[7];
                             nations.add(temp);
                     }
-                    state = nationState.NULL;
                     break;
                 // XML file has ended (redundant).
                 case XMLStreamConstants.END_DOCUMENT:
@@ -313,11 +246,8 @@ public class StaxXMLLoader {
         return nations;
     }
 
-    private enum civCardState {
-        NULL, TYPE, DISCOUNT, SCORE, QUANTITY, TEXT
-    }
 
-    private ArrayList<CivCard> loadCivCards(String techCardFile) throws XMLStreamException
+    public ArrayList<CivCard> loadCivCards(String techCardFile) throws XMLStreamException, FileNotFoundException
     {
         ArrayList<CivCard> output = new ArrayList<>();
         XMLStreamReader read = openXMLStream(techCardFile);
@@ -326,7 +256,6 @@ public class StaxXMLLoader {
         ArrayList<Integer> discount = new ArrayList<>();
         int score = 0;
         boolean running = true;
-        civCardState state =  civCardState.NULL;
         while(running)
         {
             int eventCode = read.next();
@@ -338,63 +267,47 @@ public class StaxXMLLoader {
                             name = read.getAttributeValue(0);
                             break;
                         case "type":
-                            state = civCardState.TYPE;
+                            read.next();
+                            type.add(read.getText());
                             break;
                         case "discount":
-                            state = civCardState.DISCOUNT;
+                            read.next();
+                            discount.add(Integer.parseInt(read.getText()));
                             break;
                         case "score":
-                            state = civCardState.SCORE;
+                            read.next();
+                            score = Integer.parseInt(read.getText());
                             break;
                         case "quantity":
-                            state = civCardState.QUANTITY;
+                            //TODO: Await review of CivCard format.
                             break;
                         case "text":
-                            state = civCardState.TEXT;
+                            if(nextIsCharacters(read))
+                                text = read.getText();
+                            else
+                                text = null;
                             break;
                     }
                     break;
                 // Read data between XML tags based on state, state indicates the tag we are within.
                 case XMLStreamConstants.CHARACTERS:
-                    switch(state){
-                        case TYPE:
-                            type.add(read.getText());
-                            break;
-                        case DISCOUNT:
-                            discount.add(Integer.parseInt(read.getText()));
-                            break;
-                        case SCORE:
-                            score = Integer.parseInt(read.getText());
-                            break;
-                        case QUANTITY:
-                            //TODO: Await review of CivCard format.
-                            break;
-                        case TEXT:
-                            text = read.getText();
-                            break;
-
-                    }
-                    state = civCardState.NULL;
                     break;
                 // If we now have enough data to do something, do it.
                 case XMLStreamConstants.END_ELEMENT:
                     switch (read.getLocalName())
-                        {
-                            case "civCard":
-                                String[] conv = new String[type.size()];
-                                type.toArray(conv);
-                                CivCard temp = new CivCard(name, conv, text, toIntArray(discount), score);
-                                output.add(temp);
-                                type = new ArrayList<>();
-                                discount = new ArrayList<>();
-                                text = null;
-                                break;
-                            case "cards":
-                                running = false;
-                                break;
-                            default:
-                                state = civCardState.NULL;
-                                break;
+                    {
+                        case "civCard":
+                            String[] conv = new String[type.size()];
+                            type.toArray(conv);
+                            CivCard temp = new CivCard(name, conv, text, toIntArray(discount), score);
+                            output.add(temp);
+                            type = new ArrayList<>();
+                            discount = new ArrayList<>();
+                            text = null;
+                            break;
+                        case "cards":
+                            running = false;
+                            break;
                     }
                     break;
                 // XML file has ended (redundant).
@@ -409,11 +322,17 @@ public class StaxXMLLoader {
         return output;
     }
 
-    public JCivMap createMap(String mapXML, String disasterXML) throws XMLStreamException
+    /**
+     * Moves the reader on one and reports whether it is now on text.
+     * Also returns false if what is read is all empty space.
+     * @param read XMLStreamerReader being used to parse XML.
+     * @return Is the reader now looking at characters?
+     * @throws XMLStreamException
+     */
+    private boolean nextIsCharacters(XMLStreamReader read) throws XMLStreamException
     {
-        HashMap<Integer, MapNode> map = loadMap(mapXML);
-        Vector<DisasterZone> disasterZones = new Vector<>(loadDisasterZones(disasterXML, map));
-        return new JCivMap(map, disasterZones);
+        int eventCode = read.next();
+        return eventCode == XMLStreamConstants.CHARACTERS && !read.getText().trim().equals("");
     }
 
     private class Tuple {

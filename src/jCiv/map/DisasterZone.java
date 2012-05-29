@@ -1,7 +1,6 @@
 package jCiv.map;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * User: nathan
@@ -10,18 +9,13 @@ import java.util.HashMap;
  */
 public abstract class DisasterZone {
     private final ArrayList<MapNode> zones;
-    private final HashMap<MapNode, Boolean> cityAffected;
-
     /**
      * 
      * @param zones
-     * @param cityAffected each value should be true if the node has a city site which is affected 
-     * 	      by the disaster, and false otherwise (in practice this will only affect flood plains)
      */
-    public DisasterZone(ArrayList<MapNode> zones, HashMap<MapNode, Boolean> cityAffected)
+    public DisasterZone(ArrayList<MapNode> zones)
     {
         this.zones = zones;
-        this.cityAffected = cityAffected;
     }
 
     /**
@@ -45,23 +39,12 @@ public abstract class DisasterZone {
         }
         return found;
     }
-    
-    /**
-     * @param nodeID the id of the node to be checked
-     * @return true iff the given node is within this disaster zone, the node contains a
-     * 		   city site, and the city site is affected by the disaster.
-     */
+
     public boolean cityIsAffected(int nodeID)
     {
-    	boolean affected = false;
-    	for (MapNode n : zones) {
-    		if (n.nodeNum == nodeID && cityAffected.get(n)) {
-    			affected = true;
-    		}
-    	}
-    	return affected;
+        return containsNode(nodeID);
     }
-    
+
     /**
      * Check whether this zone contains a given mapNode
      * @param nodeID the id of the mapnode to be checked
@@ -84,9 +67,6 @@ public abstract class DisasterZone {
     	String result = "\tAffected nodes:";
     	for (MapNode n : zones) {
     		result += "\n\t\tID:" + n.nodeNum;
-    		if (cityAffected.get(n)) {
-    			result += " (city is affected)";
-    		}
     	}
     	
     	return result;
