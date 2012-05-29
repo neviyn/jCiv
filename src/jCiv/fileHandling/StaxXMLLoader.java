@@ -11,6 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * User: Nathan Cannon
@@ -106,11 +107,15 @@ public class StaxXMLLoader {
                         case POPLIMIT:
                             support = Integer.parseInt(read.getText());
                             break;
-                        case NEIGHBOURLIST:
+                        case LINK:
                             neighbours.add(new Tuple(linkType, Integer.parseInt(read.getText())));
                             break;
                         case CITYSITE:
                             cityPoint = !read.getText().equals("");
+                            break;
+                        case NEIGHBOURLIST:
+                            break;
+                        case NODELINKS:
                             break;
                         default:
                             throw new IllegalStateException("Unknown state based on XML tag!");
@@ -181,11 +186,9 @@ public class StaxXMLLoader {
             switch(eventCode) {
                 // Starting XML element, set read state.
                 case XMLStreamConstants.START_ELEMENT:
-                    System.out.println("Start:"+read.getLocalName());
                     switch(read.getLocalName())
                     {
                         case "disasterZoneList":
-                            System.out.println("Attr:"+read.getAttributeValue(0));
                             switch(read.getAttributeValue(0))
                             {
                                 case "flood plain":
@@ -204,14 +207,12 @@ public class StaxXMLLoader {
                     break;
                 // Read data between XML tags based on state, state indicates the tag we are within.
                 case XMLStreamConstants.CHARACTERS:
-                    System.out.println("'"+read.getText()+"'");
                     if(mNode)
                         temp.add(mapNodes.get(Integer.parseInt(read.getText())));
                     break;
 
                 // If we now have enough data to do something, do it.
                 case XMLStreamConstants.END_ELEMENT:
-                    System.out.println("End:"+read.getLocalName());
                     switch(read.getLocalName())
                     {
                         case "disasterZone":
@@ -323,7 +324,7 @@ public class StaxXMLLoader {
         String name = null, text = null;
         ArrayList<String> type = new ArrayList<>();
         ArrayList<Integer> discount = new ArrayList<>();
-        int max = 0, score = 0;
+        int score = 0;
         boolean running = true;
         civCardState state =  civCardState.NULL;
         while(running)
@@ -366,7 +367,7 @@ public class StaxXMLLoader {
                             score = Integer.parseInt(read.getText());
                             break;
                         case QUANTITY:
-                            max = Integer.parseInt(read.getText());
+                            //TODO: Await review of CivCard format.
                             break;
                         case TEXT:
                             text = read.getText();
@@ -382,7 +383,7 @@ public class StaxXMLLoader {
                             case "civCard":
                                 String[] conv = new String[type.size()];
                                 type.toArray(conv);
-                                CivCard temp = new CivCard(name, conv, text, toIntArray(discount), max, score);
+                                CivCard temp = new CivCard(name, conv, text, toIntArray(discount), score);
                                 output.add(temp);
                                 type = new ArrayList<>();
                                 discount = new ArrayList<>();
@@ -406,6 +407,13 @@ public class StaxXMLLoader {
             }
         }
         return output;
+    }
+
+    public JCivMap createMap(String mapXML, String disasterXML) throws XMLStreamException
+    {
+        HashMap<Integer, MapNode> map = loadMap(mapXML);
+        Vector<DisasterZone> disasterZones = new Vector<>(loadDisasterZones(disasterXML, map));
+        return new JCivMap(map, disasterZones);
     }
 
     private class Tuple {
